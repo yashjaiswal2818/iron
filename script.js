@@ -7,14 +7,14 @@ const loadingText = document.querySelector('.loading-text');
 // Configuration
 const config = {
     desktop: {
-        path: 'public/images/desktop/',
+        path: 'assets/images/desktop/',
         count: 121,
         prefix: '',
         suffix: '.jpg',
         pad: 5
     },
     mobile: {
-        path: 'public/images/mobile/',
+        path: 'assets/images/mobile/',
         count: 233,
         prefix: 'ezgif-frame-',
         suffix: '.jpg',
