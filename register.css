@@ -1,0 +1,214 @@
+/**
+ * Register Page - Stark Industries Bootcamp
+ */
+
+:root {
+    --hud-color: #00ffff;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+a,
+button {
+    cursor: pointer;
+}
+
+/* Register Page */
+.register-page {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #0a0a0a 0%, #151520 50%, #0a0a0a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.register-container {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(20, 20, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 0, 0, 0.05);
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.register-back {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    transition: color 0.2s ease;
+}
+
+.register-back:hover {
+    color: var(--hud-color);
+}
+
+.register-header .register-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+}
+
+.register-header .register-subtitle {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.register-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.register-form label {
+    display: block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+}
+
+.register-form .required {
+    color: #ff4444;
+}
+
+.register-form .optional {
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.7rem;
+}
+
+.register-form input[type="text"],
+.register-form input[type="tel"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-form input:focus {
+    outline: none;
+    border-color: var(--hud-color);
+    box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.2);
+}
+
+.register-form input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.register-form input.error {
+    border-color: #ff4444;
+}
+
+.register-form .form-group input + input {
+    margin-top: 0.5rem;
+}
+
+.form-error {
+    display: block;
+    font-size: 0.75rem;
+    color: #ff4444;
+    margin-top: 0.25rem;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.2) 0%, rgba(255, 0, 0, 0.1) 100%);
+    border: 2px solid #ff0000;
+    color: #ff0000;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.4) 0%, rgba(255, 0, 0, 0.2) 100%);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
+}
+
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.form-message {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.form-message.visible {
+    display: block;
+}
+
+.form-message.success {
+    background: rgba(0, 255, 100, 0.15);
+    border: 1px solid rgba(0, 255, 100, 0.4);
+    color: #00ff64;
+}
+
+.form-message.error {
+    background: rgba(255, 68, 68, 0.15);
+    border: 1px solid rgba(255, 68, 68, 0.4);
+    color: #ff4444;
+}
+
+.form-message.info {
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    color: var(--hud-color);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .register-container {
+        padding: 2rem 1.5rem;
+    }
+
+    .register-header .register-title {
+        font-size: 1.5rem;
+    }
+}

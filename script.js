@@ -1,5 +1,5 @@
 const canvas = document.getElementById('hero-canvas');
-const context = canvas.getContext('2d');
+const context = canvas ? canvas.getContext('2d') : null;
 const loadingScreen = document.getElementById('loading-screen');
 const progressBar = document.querySelector('.progress');
 const loadingText = document.querySelector('.loading-text');
@@ -51,13 +51,10 @@ function checkDevice() {
 
 
 function resizeCanvas() {
+    if (!canvas || !context) return;
     const dpr = window.devicePixelRatio || 1;
-
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
-
-
-
     requestAnimationFrame(() => updateImage(getScrollProgress()));
 }
 
@@ -65,6 +62,7 @@ function resizeCanvas() {
 function getScrollProgress() {
     const scrollTop = document.documentElement.scrollTop;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll <= 0) return 0;
     return Math.min(Math.max(scrollTop / maxScroll, 0), 1);
 }
 
@@ -88,7 +86,7 @@ function drawImageProp(ctx, img) {
 
 
 function updateImage(progress) {
-    if (images.length === 0) return;
+    if (!context || images.length === 0 || !currentConfig) return;
 
     const frameIndex = Math.min(
         currentConfig.count - 1,
@@ -123,12 +121,16 @@ function updateImage(progress) {
 
 
 function initImages() {
+    if (!currentConfig) return;
 
     images.length = 0;
     loadedCount = 0;
     isInitialLoad = true;
-    loadingScreen.style.opacity = '1';
-    loadingScreen.style.pointerEvents = 'auto';
+
+    if (loadingScreen) {
+        loadingScreen.style.opacity = '1';
+        loadingScreen.style.pointerEvents = 'auto';
+    }
 
     const { path, count, prefix, suffix, pad } = currentConfig;
 
@@ -151,15 +153,17 @@ function initImages() {
             loadedCount++;
             
             const percent = Math.round((loadedCount / count) * 100);
-            progressBar.style.width = `${percent}%`;
-            loadingText.innerText = `SYSTEM LOADING... ${percent}%`;
+            if (progressBar) progressBar.style.width = `${percent}%`;
+            if (loadingText) loadingText.innerText = `SYSTEM LOADING... ${percent}%`;
 
             // Show page after initial images load
             if (isInitialLoad && loadedCount >= INITIAL_IMAGES_TO_LOAD) {
                 isInitialLoad = false;
                 setTimeout(() => {
-                    loadingScreen.style.opacity = '0';
-                    loadingScreen.style.pointerEvents = 'none';
+                    if (loadingScreen) {
+                        loadingScreen.style.opacity = '0';
+                        loadingScreen.style.pointerEvents = 'none';
+                    }
                     resizeCanvas();
                 }, 300);
             }
@@ -209,7 +213,7 @@ function initImages() {
 
     // Safety Timeout: Dismiss loader after 2 seconds if initial images don't load
     setTimeout(() => {
-        if (isInitialLoad && loadingScreen.style.opacity !== '0') {
+        if (isInitialLoad && loadingScreen && loadingScreen.style.opacity !== '0') {
             isInitialLoad = false;
             loadingScreen.style.opacity = '0';
             loadingScreen.style.pointerEvents = 'none';
@@ -240,24 +244,20 @@ const observerOptions = {
     threshold: 0.15 // Trigger when 15% visible
 };
 
-const observer = new IntersectionObserver((entries, observer) => {
+const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-
-            // Trigger number counting if element has .count-up
-            if (entry.target.classList.contains('count-up')) {
-                animateValue(entry.target);
-            }
-
-            observer.unobserve(entry.target); // Only animate once
-        }
+        if (!entry.isIntersecting) return;
+        const target = entry.target;
+        target.classList.add('visible');
+        if (target.classList.contains('count-up')) animateValue(target);
+        obs.unobserve(target); // Only animate once
     });
 }, observerOptions);
 
 // 2. Dynamic Number Counting
 function animateValue(obj) {
-    const rawValue = obj.getAttribute('data-value') || obj.innerText;
+    if (!obj) return;
+    const rawValue = obj.getAttribute('data-value') || obj.innerText || '0';
     const value = parseFloat(rawValue.replace(/[^0-9.]/g, ''));
     const suffix = rawValue.replace(/[0-9.]/g, '');
 
@@ -298,9 +298,9 @@ document.addEventListener('mousemove', (e) => {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    // Start loading images immediately
-    checkDevice();
-    
+    // Start loading images immediately (only if canvas exists - main page)
+    if (canvas) checkDevice();
+
     const hiddenElements = document.querySelectorAll('.reveal-on-scroll');
     hiddenElements.forEach((el) => observer.observe(el));
 });
